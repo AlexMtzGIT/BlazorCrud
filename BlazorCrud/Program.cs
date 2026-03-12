@@ -1,5 +1,6 @@
 using BlazorCrud.Components;
 using BlazorCrud.Components.Data;
+using BlazorCrud.Repositorio;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+//Se agrega como inyección de dependencias el repositorio
+builder.Services.AddScoped<IRepositorio, Repositorio>();
 
 var app = builder.Build();
 

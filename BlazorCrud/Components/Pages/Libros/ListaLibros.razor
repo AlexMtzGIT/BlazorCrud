@@ -1,0 +1,65 @@
+﻿@page "/libros"
+@using BlazorCrud.Modelos
+@using BlazorCrud.Repositorio
+@inject IRepositorio Repositorio
+
+<h1>CRUD con BLAZOR SERVER Y MSSQLLOCALDB</h1>
+
+
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="text-dark">Lista de Libros</h2>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table table-striped" >
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Titulo</th>
+                    <th>Descripcion</th>
+                    <th>Autor</th>
+                    <th>Paginas</th>
+                    <th>Precio</th>
+                    <th>Fecha de Creacion</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var librooo in listaLibros)//aqui se crea la variable "librooo", no en otro lado
+                {
+                    <tr>
+                        <td>@librooo.Id</td>
+                        <td>@librooo.Titulo</td>
+                        <td>@librooo.Descripcion</td>
+                        <td>@librooo.Autor</td>
+                        <td>@librooo.Paginas</td>
+                        <td>@librooo.Precio</td>
+                        <td>@librooo.FechaCreacion</td>
+                        <td>
+                            <a href="editar-libro/@librooo.Id" class="btn btn-success btn-sm"><span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Editar</a>
+                            <button @onclick="@(() => BorrarLibro(librooo.Id))" class="btn btn-danger btn-sm"><span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Borrar</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+@code {
+    private List<Libro> listaLibros = new List<Libro>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        listaLibros = await Repositorio.GetLibros();
+    }
+
+    //Método para borrar Libro
+    private async Task BorrarLibro(int libroId)//recibe el Id del libro para saber cual debe de borrar
+    {
+        
+    }
+}
