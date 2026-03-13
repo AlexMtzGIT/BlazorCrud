@@ -2,6 +2,7 @@
 
 namespace BlazorCrud.Modelos
 {
+
     public class Libro
     {
         [Key] //este atributo indica que esta propiedad es la clave primaria de la entidad
