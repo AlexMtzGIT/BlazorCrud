@@ -1,0 +1,123 @@
+﻿@page "/editar-libro/{id:int}"
+@using BlazorCrud.Modelos
+@using BlazorCrud.Repositorio
+@inject IRepositorio Repositorio
+@inject NavigationManager navigationManager
+
+<h1>CRUD con BLAZOR SERVER Y MSSQLLOCALDB</h1>
+
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="text-dark">Editar Libro</h2>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <EditForm Model="modeloLibro" OnValidSubmit="@(() => ManejadorOnEditarLibro())">
+            <DataAnnotationsValidator></DataAnnotationsValidator>
+            <div class="container">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-2">
+                            <label>Título</label>
+                        </div>
+                        <div class="col-6">
+                            <InputText @bind-Value="modeloLibro.Titulo" class="form-control" placeholder="Ingresa el titulo"></InputText>
+                            <ValidationMessage For="() => modeloLibro.Titulo"></ValidationMessage>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="container">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-2">
+                            <label>Descripción</label>
+                        </div>
+                        <div class="col-6">
+                            <InputText @bind-Value="modeloLibro.Descripcion" class="form-control" placeholder="Ingresa la Descripción"></InputText>
+                            <ValidationMessage For="() => modeloLibro.Descripcion"></ValidationMessage>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="container">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-2">
+                            <label>Autor</label>
+                        </div>
+                        <div class="col-6">
+                            <InputText @bind-Value="modeloLibro.Autor" class="form-control" placeholder="Ingresa el Autor"></InputText>
+                            <ValidationMessage For="() => modeloLibro.Autor"></ValidationMessage>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="container">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-2">
+                            <label>Páginas</label>
+                        </div>
+                        <div class="col-6">
+                            <InputNumber @bind-Value="modeloLibro.Paginas" class="form-control" placeholder="Ingresa el # de Paginas"></InputNumber>
+                            <ValidationMessage For="() => modeloLibro.Paginas"></ValidationMessage>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="container">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-2">
+                            <label>Precio</label>
+                        </div>
+                        <div class="col-6">
+                            <InputNumber @bind-Value="modeloLibro.Precio" class="form-control" placeholder="Ingresa el Precio"></InputNumber>
+                            <ValidationMessage For="() => modeloLibro.Precio"></ValidationMessage>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="container">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-2">
+                            <button type="submit" class="btn btn-success"><span class="oi oi-cog" aria-hidden="true"></span>Actualizar Libro</button>
+                        </div>
+                        <div class="col-6">
+                            <button class="btn btn-danger" @onclick="@(() => navigationManager.NavigateTo("/libros"))"><span class="oi oi-chevron-left" aria-hidden="true"></span>Regresar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private Libro modeloLibro = new Libro();//esta es una propiedad privada del modelo "Libro", para que podamos acceder al modelo y tener los datos de los libros, en este caso la llamamos "modeloLibro"
+    [Parameter]
+    public int? Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        modeloLibro = await Repositorio.GetLibro(Id.Value);
+    }
+
+    //Método para guardar un libro en la BD
+    private async Task ManejadorOnEditarLibro()
+    {
+        var editarLibro = await Repositorio.ActualizarLibro(Id.Value, modeloLibro); //aqui creamos la variable "editarLibro" la cual llama al metodo "ActualizarLibro" el cual esta en el Repositorio, este metodo recibe tanto el Id (Id.value) como el modelo (modeloLibro), como fue declarado en el Repositorio
+        navigationManager.NavigateTo("/libros");
+    }
+}
+
