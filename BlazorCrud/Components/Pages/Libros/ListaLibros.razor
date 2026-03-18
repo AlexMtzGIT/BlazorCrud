@@ -60,6 +60,9 @@
     //Método para borrar Libro
     private async Task BorrarLibro(int libroId)//recibe el Id del libro para saber cual debe de borrar
     {
-        
+        await Repositorio.EliminarLibro(libroId);
+
+        //Actualizar el modelo de libros para que recargue la lista de libros
+        listaLibros = await Repositorio.GetLibros();
     }
 }
